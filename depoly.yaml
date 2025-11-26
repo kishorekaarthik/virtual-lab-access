@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vlas-backend
+  labels:
+    app: vlas-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vlas-backend
+  template:
+    metadata:
+      labels:
+        app: vlas-backend
+    spec:
+      containers:
+      - name: vlas-api
+        image: vlasregistry2025.azurecr.io/vlas-backend:latest
+        ports:
+          - containerPort: 80
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "150m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
+        env:
+          - name: ENVIRONMENT
+            value: "production"
+          - name: COSMOS_DB_CONNECTION
+            valueFrom:
+              secretKeyRef:
+                name: vlas-secrets
+                key: cosmosDbConn
+          - name: LABSERVICES_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: vlas-secrets
+                key: labApiKey
+          - name: GEMINI_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: vlas-secrets
+                key: geminiApiKey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vlas-backend-service
+spec:
+  selector:
+    app: vlas-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vlas-config
+data:
+  college-name: "Rajalakshmi Engineering College"
+  default-lab-duration-minutes: "120"
+  max-concurrent-labs: "50"
+  ai-generator-mode: "enabled"
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: vlas-backend-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: vlas-backend
+  minReplicas: 1
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 65
