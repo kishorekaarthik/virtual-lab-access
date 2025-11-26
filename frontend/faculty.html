@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Faculty Dashboard • Virtual Labs</title>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("logoutBtn");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          localStorage.clear();           
+          alert("Logged out successfully"); 
+          location.href = "index.html";   
+        });
+      }
+    });
+  </script>
+  <style>
+    /* --- Styles unchanged --- */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;}
+    body { background: #fafafa; color: #2c3e50; line-height: 1.6; overflow-x: hidden; }
+    .hero-header { background: linear-gradient(135deg, rgba(45, 55, 72, 0.95) 0%, rgba(90, 45, 130, 0.9) 100%), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1600') center center / cover no-repeat; min-height: 50vh; position: relative; display: flex; flex-direction: column; color: white; }
+    .hero-header::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(90, 45, 130, 0.3); z-index: 1; }
+    .nav-bar { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 4rem; position: relative; z-index: 10; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1);}
+    .logo-section { display: flex; align-items: center; }
+    .logo-img { height: 50px; width: auto; margin-right: 20px; filter: brightness(1.1);}
+    .title-section .main-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.5px; }
+    .motto { font-size: 0.85rem; color: #ffd700; font-weight: 400; opacity: 0.9; }
+    .navigation { display: flex; gap: 2.5rem; }
+    .nav-link { color: white; text-decoration: none; font-weight: 500; font-size: 0.95rem; padding: 0.6rem 1.2rem; border-radius: 6px; transition: all 0.3s ease; border: 1px solid transparent; }
+    .nav-link:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 215, 0, 0.5); transform: translateY(-1px); }
+    .hero-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem; position: relative; z-index: 5; }
+    .hero-title { font-size: 2.75rem; font-weight: 700; margin-bottom: 1rem; letter-spacing: -1px; line-height: 1.1; }
+    .hero-subtitle { font-size: 1.15rem; opacity: 0.9; font-weight: 400; max-width: 600px; }
+    .faculty-badge { display: inline-block; background: rgba(255, 215, 0, 0.2); color: #ffd700; padding: 0.4rem 1.2rem; border-radius: 25px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border: 1.5px solid rgba(255, 215, 0, 0.4); margin-top: 1rem; }
+    .content-section { padding: 4rem 2rem; background: white; }
+    .container { max-width: 1400px; margin: 0 auto; }
+    .add-lab-card { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08); border: 1px solid #e2e8f0; margin-bottom: 3rem; position: relative; overflow: hidden; }
+    .add-lab-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #5a2d82, #7c3aed); }
+    .card-title { font-size: 1.75rem; font-weight: 700; color: #2d3748; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
+    .card-subtitle { font-size: 1rem; color: #64748b; margin-bottom: 2rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-input { padding: 1rem 1.25rem; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; transition: all 0.3s ease; background: white; margin-bottom: 0.5rem; }
+    .form-input:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1); }
+    .form-input::placeholder { color: #94a3b8; }
+    .submit-btn { padding: 1rem 2.5rem; background: linear-gradient(135deg, #5a2d82, #7c3aed); color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { background: linear-gradient(135deg, #cbd5e0, #94a3b8); cursor: not-allowed; transform: none; }
+    .students-section { margin-top: 3rem; }
+    .section-header { margin-bottom: 2rem; }
+    .section-title { font-size: 2rem; font-weight: 700; color: #2d3748; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
+    .section-subtitle { font-size: 1rem; color: #64748b; }
+    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem; }
+    .student-card { background: white; padding: 1.75rem; border-radius: 12px; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06); border: 1px solid #e2e8f0; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out backwards; }
+    .student-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .student-avatar { width: 45px; height: 45px; background: #7c3aed; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 700; font-size: 1.2rem; }
+    .student-info h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+    .student-info .lab-badge { background: #e9d5ff; color: #7c3aed; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 20px; display: inline-block; }
+    .student-details { display: flex; flex-direction: column; gap: 0.5rem; }
+    .detail-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: #475569; }
+    .detail-label { font-weight: 600; color: #334155; }
+    .action-buttons { display: flex; gap: 0.5rem; }
+    .action-btn { padding: 0.25rem 0.75rem; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.3s ease; }
+    .edit-btn { background: #fcd34d; color: #92400e; }
+    .delete-btn { background: #f87171; color: white; }
+    @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <header class="hero-header">
+    <nav class="nav-bar">
+      <div class="logo-section">
+        <img src="https://seeklogo.com/images/V/virtual-lab-logo-3A37A7C508-seeklogo.com.png" class="logo-img" alt="Logo">
+        <div class="title-section">
+          <div class="main-title">Virtual Labs</div>
+          <div class="motto">Faculty Dashboard</div>
+        </div>
+      </div>
+      <div class="navigation">
+        <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <h1 class="hero-title">Welcome, Faculty</h1>
+      <p class="hero-subtitle">Manage virtual labs, assign tasks, and track student submissions efficiently.</p>
+      <span class="faculty-badge">Faculty Access</span>
+    </div>
+  </header>
+
+  <section class="content-section">
+    <div class="container">
+      <!-- Add Lab Card -->
+      <div class="add-lab-card">
+        <div class="card-title">➕ Create New Virtual Lab</div>
+        <div class="card-subtitle">Add a lab with tasks</div>
+
+        <div class="form-grid">
+          <input type="text" id="labName" class="form-input" placeholder="Lab Name"/>
+          <input type="text" id="labCat" class="form-input" placeholder="Category"/>
+          <input type="number" id="labCap" class="form-input" placeholder="Capacity" min="1"/>
+        </div>
+
+        <h3>Add Tasks</h3>
+        <div id="tasksContainer">
+          <div class="form-grid task-block">
+            <input type="text" class="taskName form-input" placeholder="Task Name"/>
+            <input type="text" class="taskDesc form-input" placeholder="Description"/>
+            <input type="date" class="taskDue form-input"/>
+            <input type="number" class="taskMarks form-input" placeholder="Marks" min="0"/>
+          </div>
+        </div>
+        <button class="submit-btn" id="addTaskBtn">➕ Add Another Task</button>
+        <button class="submit-btn" id="btnAddLab">➕ Add Lab</button>
+      </div>
+
+      <!-- Labs Section -->
+      <div class="students-section">
+        <div class="section-header">
+          <h2 class="section-title">Virtual Labs</h2>
+          <p class="section-subtitle">All your labs and their tasks</p>
+        </div>
+        <div class="students-grid" id="labsGrid"></div>
+      </div>
+
+    </div>
+  </section>
+
+<script>
+const API = "http://localhost:7071/api"; 
+const token = localStorage.getItem("token");
+
+// Add more task blocks
+document.getElementById('addTaskBtn').addEventListener('click', () => {
+  const container = document.getElementById("tasksContainer");
+  const div = document.createElement("div");
+  div.className = "form-grid task-block";
+  div.innerHTML = `
+    <input type="text" class="taskName form-input" placeholder="Task Name"/>
+    <input type="text" class="taskDesc form-input" placeholder="Description"/>
+    <input type="date" class="taskDue form-input"/>
+    <input type="number" class="taskMarks form-input" placeholder="Marks" min="0"/>
+  `;
+  container.appendChild(div);
+});
+
+// Collect tasks from all blocks
+function collectTasks() {
+  const tasks = [];
+  document.querySelectorAll('.task-block').forEach((block, i) => {
+    const name = block.querySelector('.taskName').value.trim();
+    if (name) {
+      tasks.push({
+        taskId: Date.now().toString(36) + i,
+        taskName: name,
+        description: block.querySelector('.taskDesc').value.trim(),
+        dueDate: block.querySelector('.taskDue').value,
+        marks: Number(block.querySelector('.taskMarks').value) || 0
+      });
+    }
+  });
+  return tasks;
+}
+
+// Add Lab
+document.getElementById('btnAddLab').addEventListener('click', async () => {
+  const name = document.getElementById('labName').value.trim();
+  const category = document.getElementById('labCat').value.trim();
+  const capacity = parseInt(document.getElementById('labCap').value);
+  const tasks = collectTasks();
+
+  if (!name || !category || !capacity) { alert('Fill all lab fields'); return; }
+
+  const btn = document.getElementById('btnAddLab');
+  btn.disabled = true; btn.textContent = '⏳ Adding Lab...';
+
+  try {
+    const res = await fetch(`${API}/faculty/labs`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ name, category, capacity, tasks })
+    });
+    if (!res.ok) throw new Error(await res.text());
+    alert('✅ Lab added successfully!');
+
+    document.getElementById('labName').value = '';
+    document.getElementById('labCat').value = '';
+    document.getElementById('labCap').value = '';
+    document.getElementById('tasksContainer').innerHTML = `<div class="form-grid task-block">
+      <input type="text" class="taskName form-input" placeholder="Task Name"/>
+      <input type="text" class="taskDesc form-input" placeholder="Description"/>
+      <input type="date" class="taskDue form-input"/>
+      <input type="number" class="taskMarks form-input" placeholder="Marks" min="0"/>
+    </div>`;
+
+    loadLabs();
+  } catch (err) { alert('Failed: ' + err.message); }
+  finally { btn.disabled = false; btn.textContent = '➕ Add Lab'; }
+});
+
+// Load Labs
+async function loadLabs() {
+  const labsGrid = document.getElementById("labsGrid");
+  labsGrid.innerHTML = "<p>Loading...</p>";
+
+  try {
+        const res = await fetch(`${API}/faculty/my-labs`, { // ✅ updated endpoint
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error("Failed to fetch labs");
+    const labs = await res.json();
+    labsGrid.innerHTML = "";
+
+    labs.forEach(lab => {
+      const card = document.createElement("div");
+      card.className = "student-card";
+
+      let tasksHTML = "";
+      if (lab.tasks?.length) {
+        lab.tasks.forEach(t => {
+          tasksHTML += `<div class="detail-row">
+            <span class="detail-label">Task:</span> ${t.taskName} (${t.marks} Marks) - Due: ${new Date(t.dueDate).toLocaleDateString()}
+          </div>`;
+        });
+      }
+
+      card.innerHTML = `
+        <div class="student-header">
+          <div class="student-avatar">🧪</div>
+          <div class="student-info">
+            <h4>${lab.name}</h4>
+            <span class="lab-badge">${lab.category}</span>
+          </div>
+          <div class="action-buttons">
+            <button class="action-btn edit-btn" data-id="${lab.id}">Edit</button>
+            <button class="action-btn delete-btn" data-id="${lab.id}">Delete</button>
+          </div>
+        </div>
+        <div class="student-details">
+          <div class="detail-row"><span class="detail-label">Capacity:</span><span class="detail-value">${lab.capacity}</span></div>
+          <div class="detail-row"><span class="detail-label">Created:</span><span class="detail-value">${new Date(lab.createdUtc).toLocaleDateString()}</span></div>
+          ${tasksHTML}
+        </div>
+      `;
+      labsGrid.appendChild(card);
+    });
+  } catch (err) { labsGrid.innerHTML = "<p>Error loading labs.</p>"; console.error(err); }
+}
+
+loadLabs();
+</script>
+</body>
+</html>

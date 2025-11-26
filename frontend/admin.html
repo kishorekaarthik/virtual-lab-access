@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Admin Dashboard • Virtual Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+    body { background:#fafafa; color:#2c3e50; line-height:1.6; overflow-x:hidden; }
+    .hero-header { background:linear-gradient(135deg, rgba(45,55,72,0.95) 0%, rgba(90,45,130,0.9) 100%), url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1600') center/cover no-repeat; min-height:60vh; display:flex; flex-direction:column; color:white; position:relative; }
+    .hero-header::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(90,45,130,0.3); z-index:1; }
+    .nav-bar { display:flex; justify-content:space-between; align-items:center; padding:1.2rem 4rem; position:relative; z-index:10; background:rgba(255,255,255,0.05); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.1); }
+    .logo-section { display:flex; align-items:center; }
+    .logo-img { height:50px; width:auto; margin-right:20px; filter:brightness(1.1); }
+    .title-section .main-title { font-size:1.5rem; font-weight:600; margin-bottom:2px; letter-spacing:-0.5px; }
+    .motto { font-size:0.85rem; color:#ffd700; font-weight:400; opacity:0.9; }
+    .navigation { display:flex; gap:2.5rem; }
+    .nav-link, button { color:white; font-weight:500; font-size:0.95rem; padding:0.6rem 1.2rem; border-radius:6px; border:1px solid transparent; background:none; cursor:pointer; text-decoration:none; }
+    .nav-link:hover, button:hover { background:rgba(255,255,255,0.1); border-color:rgba(255,215,0,0.5); transform:translateY(-1px); }
+    .hero-content { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:4rem 2rem; position:relative; z-index:5; }
+    .hero-title { font-size:3rem; font-weight:700; margin-bottom:1rem; letter-spacing:-1px; line-height:1.1; }
+    .hero-subtitle { font-size:1.15rem; opacity:0.9; font-weight:400; max-width:600px; }
+    .admin-badge { display:inline-block; background:rgba(255,215,0,0.2); color:#ffd700; padding:0.4rem 1.2rem; border-radius:25px; font-size:0.85rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; border:1.5px solid rgba(255,215,0,0.4); margin-top:1rem; }
+    .stats-section { background:linear-gradient(135deg, #5a2d82, #7c3aed); color:white; padding:3rem 2rem; text-align:center; position:relative; z-index:10; }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:2rem; max-width:1200px; margin:0 auto; }
+    .stat-item { text-align:center; }
+    .stat-number { font-size:2.5rem; font-weight:700; color:#ffd700; margin-bottom:0.5rem; }
+    .stat-label { font-size:1rem; opacity:0.9; font-weight:500; }
+    .content-section { padding:5rem 2rem; background:white; }
+    .section-header { text-align:center; margin-bottom:4rem; }
+    .section-title { font-size:2.5rem; font-weight:700; color:#2d3748; margin-bottom:1rem; letter-spacing:-0.5px; }
+    .section-subtitle { font-size:1.1rem; color:#64748b; max-width:600px; margin:0 auto; font-weight:400; }
+    .search-container { max-width:800px; margin:0 auto 3rem; }
+    .search-wrapper { position:relative; display:flex; gap:1rem; }
+    .search-box { flex:1; position:relative; }
+    .search-box input { width:100%; padding:1rem 1.5rem; border:2px solid #e2e8f0; border-radius:12px; font-size:1rem; transition:all 0.3s ease; background:white; }
+    .search-box input:focus { outline:none; border-color:#7c3aed; box-shadow:0 0 0 4px rgba(124,58,237,0.1); }
+    .refresh-btn { padding:1rem 2rem; background:linear-gradient(135deg,#5a2d82,#7c3aed); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; transition:all 0.3s ease; }
+    .refresh-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(124,58,237,0.3); }
+    .users-grid, .labs-grid, .bookings-grid, .sessions-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(350px,1fr)); gap:2rem; max-width:1400px; margin:0 auto; }
+    .user-card, .lab-card, .booking-card, .session-card { background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 25px rgba(0,0,0,0.08); transition:all 0.3s ease; border:1px solid #e2e8f0; }
+    .user-card:hover, .lab-card:hover, .booking-card:hover, .session-card:hover { transform:translateY(-5px); box-shadow:0 10px 40px rgba(0,0,0,0.12); border-color:#cbd5e0; }
+    .card-header { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:2px solid #f1f5f9; }
+    .user-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#5a2d82,#7c3aed); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:1.5rem; flex-shrink:0; }
+    .user-info { flex:1; min-width:0; }
+    .user-email { font-size:1.05rem; font-weight:600; color:#2d3748; margin-bottom:0.25rem; word-break:break-all; }
+    .role-badge { display:inline-flex; padding:0.35rem 0.9rem; border-radius:20px; font-size:0.8rem; font-weight:600; border:1.5px solid; }
+    .role-badge.admin { background:rgba(239,68,68,0.1); color:#dc2626; border-color:rgba(239,68,68,0.2); }
+    .role-badge.faculty { background:rgba(59,130,246,0.1); color:#2563eb; border-color:rgba(59,130,246,0.2); }
+    .role-badge.student { background:rgba(16,185,129,0.1); color:#059669; border-color:rgba(16,185,129,0.2); }
+    .card-label { font-size:0.85rem; color:#64748b; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.75rem; }
+    .card-select { width:100%; padding:0.875rem 1rem; border:2px solid #e2e8f0; border-radius:8px; font-size:0.95rem; color:#2d3748; background:white; cursor:pointer; font-weight:500; }
+    .card-select:focus { outline:none; border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.1); }
+    .update-btn { width:100%; padding:1rem; background:linear-gradient(135deg,#5a2d82,#7c3aed); color:white; border:none; border-radius:8px; font-size:1rem; font-weight:600; cursor:pointer; transition:all 0.3s ease; }
+    .update-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(124,58,237,0.3); }
+    .loading-state, .empty-state { text-align:center; padding:4rem 2rem; grid-column:1/-1; }
+    .footer { background:#1a202c; color:white; padding:3rem 2rem 2rem; text-align:center; }
+    .footer-links { display:flex; justify-content:center; gap:3rem; margin-bottom:2rem; flex-wrap:wrap; }
+    .footer-link { color:#a0aec0; text-decoration:none; font-weight:500; transition:color 0.3s ease; }
+    .footer-link:hover { color:#ffd700; }
+    .footer-bottom { padding-top:2rem; border-top:1px solid #2d3748; color:#718096; }
+  </style>
+</head>
+<body>
+  <header class="hero-header">
+    <nav class="nav-bar">
+      <div class="logo-section">
+        <img src="logo2.png" alt="REC Logo" class="logo-img">
+        <div class="title-section">
+          <div class="main-title">Rajalakshmi Engineering College</div>
+          <div class="motto">Because The World Needs You</div>
+        </div>
+      </div>
+      <div class="navigation">
+        <button id="logoutBtn">Logout</button>
+        <a href="#" class="nav-link">About</a>
+      </div>
+    </nav>
+    <div class="hero-content">
+      <h1 class="hero-title">Admin Dashboard</h1>
+      <p class="hero-subtitle">Manage users, labs, bookings, and sessions across the virtual laboratory platform</p>
+      <span class="admin-badge">System Administrator</span>
+    </div>
+  </header>
+
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-number" id="totalUsers">--</div><div class="stat-label">Total Users</div></div>
+      <div class="stat-item"><div class="stat-number" id="totalStudents">--</div><div class="stat-label">Students</div></div>
+      <div class="stat-item"><div class="stat-number" id="totalFaculty">--</div><div class="stat-label">Faculty Members</div></div>
+      <div class="stat-item"><div class="stat-number" id="totalAdmins">--</div><div class="stat-label">Administrators</div></div>
+      <div class="stat-item"><div class="stat-number" id="totalLabs">--</div><div class="stat-label">Labs</div></div>
+      <div class="stat-item"><div class="stat-number" id="totalBookings">--</div><div class="stat-label">Bookings</div></div>
+      <div class="stat-item"><div class="stat-number" id="totalSessions">--</div><div class="stat-label">Active Sessions</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">Users</h2>
+      <p class="section-subtitle">Manage user roles and permissions</p>
+    </div>
+    <div class="search-container">
+      <div class="search-wrapper">
+        <div class="search-box"><input type="text" id="searchInput" placeholder="Search users by email or role..."></div>
+        <button class="refresh-btn" onclick="window.location.reload()">Refresh</button>
+      </div>
+    </div>
+    <div class="users-grid" id="usersGrid"><div class="loading-state"><div class="state-text">Loading users...</div></div></div>
+
+    <div class="section-header">
+      <h2 class="section-title">Labs</h2>
+    </div>
+    <div class="labs-grid" id="labsGrid"><div class="loading-state"><div class="state-text">Loading labs...</div></div></div>
+
+    <div class="section-header">
+      <h2 class="section-title">Bookings</h2>
+    </div>
+    <div class="bookings-grid" id="bookingsGrid"><div class="loading-state"><div class="state-text">Loading bookings...</div></div></div>
+
+    <div class="section-header">
+      <h2 class="section-title">Active Sessions</h2>
+    </div>
+    <div class="sessions-grid" id="sessionsGrid"><div class="loading-state"><div class="state-text">Loading active sessions...</div></div></div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+      <a href="#" class="footer-link">Support</a>
+      <a href="#" class="footer-link">Documentation</a>
+      <a href="#" class="footer-link">System Status</a>
+    </div>
+    <div class="footer-bottom">© 2025 Rajalakshmi Engineering College. All rights reserved. | Powered by Microsoft Azure</div>
+  </footer>
+
+  <script type="module">
+    const API = localStorage.getItem('API_BASE') || 'http://localhost:7071/api';
+    const token = localStorage.getItem('token');
+    document.getElementById('logoutBtn')?.addEventListener('click', () => { localStorage.clear(); location.href='index.html'; });
+
+    function getInitials(email) { return email.substring(0,2).toUpperCase(); }
+    function getRoleBadgeClass(role) { return role.toLowerCase(); }
+    function updateUserStats(users) {
+      document.getElementById('totalUsers').textContent = users.length;
+      document.getElementById('totalStudents').textContent = users.filter(u=>u.role==='Student').length;
+      document.getElementById('totalFaculty').textContent = users.filter(u=>u.role==='Faculty').length;
+      document.getElementById('totalAdmins').textContent = users.filter(u=>u.role==='Admin').length;
+    }
+
+    async function loadUsers() {
+      try {
+        const r = await fetch(`${API}/admin/users`, { headers:{Authorization:`Bearer ${token}`} });
+        if(!r.ok) throw new Error('Failed to load users');
+        const users = await r.json();
+        const grid = document.getElementById('usersGrid');
+        grid.innerHTML = '';
+        if(!users.length) { grid.innerHTML='<div class="empty-state"><div class="state-text">No users found</div></div>'; return; }
+        updateUserStats(users);
+        users.forEach(u=>{
+          const card=document.createElement('div');
+          card.className='user-card';
+          card.innerHTML=`
+            <div class="card-header">
+              <div class="user-avatar">${getInitials(u.email)}</div>
+              <div class="user-info">
+                <div class="user-email">${u.email}</div>
+                <span class="role-badge ${getRoleBadgeClass(u.role)}">${u.role}</span>
+              </div>
+            </div>
+            <div class="card-label">Update Role</div>
+            <select class="card-select">
+              <option ${u.role==='Student'?'selected':''}>Student</option>
+              <option ${u.role==='Faculty'?'selected':''}>Faculty</option>
+              <option ${u.role==='Admin'?'selected':''}>Admin</option>
+            </select>
+            <button class="update-btn">Update</button>
+          `;
+          const select = card.querySelector('.card-select');
+          const btn = card.querySelector('.update-btn');
+          btn.addEventListener('click', async()=> {
+            const newRole = select.value;
+            try {
+              const res = await fetch(`${API}/admin/users/${u.id}/role`, { 
+                method:'PUT', headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'}, body:JSON.stringify({role:newRole})
+              });
+              if(!res.ok) throw new Error('Failed to update role');
+              u.role=newRole;
+              card.querySelector('.role-badge').textContent=newRole;
+              card.querySelector('.role-badge').className=`role-badge ${getRoleBadgeClass(newRole)}`;
+              updateUserStats(users);
+            } catch(e) { alert(e.message); }
+          });
+          grid.appendChild(card);
+        });
+      } catch(e) { document.getElementById('usersGrid').innerHTML='<div class="empty-state">Error loading users</div>'; }
+    }
+
+    async function loadLabs() {
+      try {
+        const r=await fetch(`${API}/admin/labs`,{ headers:{Authorization:`Bearer ${token}`} });
+        if(!r.ok) throw new Error('Failed to load labs');
+        const labs=await r.json();
+        const grid=document.getElementById('labsGrid');
+        grid.innerHTML='';
+        document.getElementById('totalLabs').textContent=labs.length;
+        if(!labs.length) { grid.innerHTML='<div class="empty-state">No labs found</div>'; return; }
+        labs.forEach(l=>{
+          const card=document.createElement('div');
+          card.className='lab-card';
+          card.innerHTML=`<div class="card-header"><div class="user-info"><div class="user-email">${l.name}</div></div></div>`;
+          grid.appendChild(card);
+        });
+      } catch(e) { document.getElementById('labsGrid').innerHTML='<div class="empty-state">Error loading labs</div>'; }
+    }
+
+    async function loadBookings() {
+      try {
+        const r=await fetch(`${API}/admin/bookings`,{ headers:{Authorization:`Bearer ${token}`} });
+        if(!r.ok) throw new Error('Failed to load bookings');
+        const bookings=await r.json();
+        const grid=document.getElementById('bookingsGrid');
+        grid.innerHTML='';
+        document.getElementById('totalBookings').textContent=bookings.length;
+        if(!bookings.length) { grid.innerHTML='<div class="empty-state">No bookings found</div>'; return; }
+        bookings.forEach(b=>{
+          const card=document.createElement('div');
+          card.className='booking-card';
+          card.innerHTML=`<div class="card-header"><div class="user-info"><div class="user-email">${b.userEmail}</div><div class="user-email">Lab: ${b.labName}</div><div>Status: ${b.status}</div></div></div>`;
+          grid.appendChild(card);
+        });
+      } catch(e) { document.getElementById('bookingsGrid').innerHTML='<div class="empty-state">Error loading bookings</div>'; }
+    }
+
+    async function loadSessions() {
+      try {
+        const r=await fetch(`${API}/admin/active-sessions`,{ headers:{Authorization:`Bearer ${token}`} });
+        if(!r.ok) throw new Error('Failed to load sessions');
+        const sessions=await r.json();
+        const grid=document.getElementById('sessionsGrid');
+        grid.innerHTML='';
+        document.getElementById('totalSessions').textContent=sessions.length;
+        if(!sessions.length) { grid.innerHTML='<div class="empty-state">No active sessions</div>'; return; }
+        sessions.forEach(s=>{
+          const card=document.createElement('div');
+          card.className='session-card';
+          card.innerHTML=`<div class="card-header"><div class="user-info"><div class="user-email">${s.userEmail}</div><div>Lab: ${s.labName}</div><div>Status: ${s.status}</div><div>Started: ${new Date(s.startTime).toLocaleString()}</div></div></div>`;
+          grid.appendChild(card);
+        });
+      } catch(e) { document.getElementById('sessionsGrid').innerHTML='<div class="empty-state">Error loading sessions</div>'; }
+    }
+
+    loadUsers();
+    loadLabs();
+    loadBookings();
+    loadSessions();
+  </script>
+</body>
+</html>

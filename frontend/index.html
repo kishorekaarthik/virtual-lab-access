@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rajalakshmi Engineering College - Virtual Labs</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0; 
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #fafafa;
+      color: #2c3e50;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Professional Header */
+    .header {
+      background: linear-gradient(
+        135deg, 
+        rgba(45, 55, 72, 0.95) 0%, 
+        rgba(90, 45, 130, 0.9) 100%
+      ), 
+      url('banner-1.jpg') center center / cover no-repeat;
+      color: white;
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+
+    /* Professional Navigation */
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      height: 50px;
+      width: auto;
+      margin-right: 20px;
+      filter: brightness(1.1);
+    }
+
+    .title-section .main-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+      letter-spacing: -0.5px;
+    }
+
+    .motto {
+      font-size: 0.85rem;
+      color: #ffd700;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .navigation {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 215, 0, 0.5);
+      transform: translateY(-1px);
+    }
+
+    /* Professional Hero Section */
+    .hero-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      z-index: 5;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      color: white;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      margin-bottom: 3rem;
+      opacity: 0.9;
+      font-weight: 400;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    .cta-button {
+      background: #ffd700;
+      color: #2d3748;
+      padding: 1rem 2.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .cta-button:hover {
+      background: #e6c200;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    /* Login Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #64748b;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .modal-close:hover {
+      background: #f1f5f9;
+      color: #2d3748;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #5a2d82, #7c3aed);
+      color: white;
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .modal-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-header p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .modal-body {
+      padding: 3rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem;
+    }
+
+    .auth-card {
+      background: #f8fafc;
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .auth-card h3 {
+      font-size: 1.5rem;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+
+    .auth-button {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #5a2d82, #7c3aed);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 0.5rem;
+    }
+
+    .auth-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    .auth-button:active {
+      transform: translateY(0);
+    }
+
+    /* Content Sections */
+    .content-section {
+      padding: 5rem 2rem;
+      background: white;
+    }
+
+    .content-section:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #64748b;
+      max-width: 600px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+      position: relative;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+      border-color: #cbd5e0;
+    }
+
+    .card-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #5a2d82, #7c3aed);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+      font-weight: 600;
+    }
+
+    .card-description {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      background: linear-gradient(135deg, #5a2d82, #7c3aed);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #ffd700;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Professional Footer */
+    .footer {
+      background: #1a202c;
+      color: white;
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      margin-bottom: 2rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-link {
+      color: #a0aec0;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: #ffd700;
+    }
+
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid #2d3748;
+      color: #718096;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .nav-bar {
+        padding: 1rem 1.5rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .navigation {
+        gap: 1.5rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .modal-body {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1.5rem;
+      }
+
+      .modal-header {
+        padding: 2rem 1.5rem 1.5rem;
+      }
+
+      .modal-header h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Professional Header -->
+  <header class="header">
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+      <div class="logo-section">
+        <img src="logo2.png" alt="REC Logo" class="logo-img">
+        <div class="title-section">
+          <div class="main-title">Rajalakshmi Engineering College</div>
+          <div class="motto">Because The World Needs You</div>
+        </div>
+      </div>
+      <div class="navigation">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#roles" class="nav-link">Roles</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <h1 class="hero-title">Virtual Laboratory Management System</h1>
+      <p class="hero-subtitle">Streamline your virtual lab operations with our comprehensive Azure-powered platform designed for educational excellence</p>
+      <button class="cta-button" id="openLoginBtn">
+        Access Portal
+      </button>
+    </div>
+  </header>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-content">
+      <button class="modal-close" id="closeModalBtn">×</button>
+      <div class="modal-header">
+        <h2>Welcome to Virtual Labs</h2>
+        <p>Sign in to access labs or create a new account</p>
+      </div>
+      <div class="modal-body">
+        <!-- Register Card -->
+        <div class="auth-card">
+          <h3>Create Account</h3>
+          <div class="input-group">
+            <input type="email" id="regEmail" placeholder="Email Address" />
+          </div>
+          <div class="input-group">
+            <input type="password" id="regPass" placeholder="Password" />
+          </div>
+          <button class="auth-button" id="btnRegister">Register</button>
+        </div>
+
+        <!-- Login Card -->
+        <div class="auth-card">
+          <h3>Sign In</h3>
+          <div class="input-group">
+            <input type="email" id="logEmail" placeholder="Email Address" />
+          </div>
+          <div class="input-group">
+            <input type="password" id="logPass" placeholder="Password" />
+          </div>
+          <button class="auth-button" id="btnLogin">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Section -->
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Active Students</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Faculty Members</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">25+</div>
+        <div class="stat-label">Virtual Labs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">99.9%</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">Platform Features</h2>
+      <p class="section-subtitle">Comprehensive tools and capabilities designed to enhance your virtual laboratory experience</p>
+    </div>
+    <div class="cards-grid">
+      <div class="feature-card">
+        <div class="card-icon">🔐</div>
+        <h3 class="card-title">Enterprise Security</h3>
+        <p class="card-description">Advanced authentication through Azure Active Directory with multi-factor authentication, single sign-on, and comprehensive audit logging for complete security compliance.</p>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">📊</div>
+        <h3 class="card-title">Advanced Analytics</h3>
+        <p class="card-description">Real-time dashboards with detailed reporting, performance metrics, and learning analytics to track progress and optimize educational outcomes across all user roles.</p>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">☁️</div>
+        <h3 class="card-title">Cloud Infrastructure</h3>
+        <p class="card-description">Scalable Azure-based architecture with automatic backups, disaster recovery, and global content delivery for reliable access from anywhere in the world.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roles Section -->
+  <section id="roles" class="content-section">
+    <div class="section-header">
+      <h2 class="section-title">User Roles & Permissions</h2>
+      <p class="section-subtitle">Tailored experiences for administrators, faculty, and students with role-based access control</p>
+    </div>
+    <div class="cards-grid">
+      <div class="feature-card">
+        <div class="card-icon">👨‍💼</div>
+        <h3 class="card-title">System Administrator</h3>
+        <p class="card-description">Complete system oversight including user management, course configuration, resource allocation, system monitoring, and comprehensive reporting capabilities for institutional governance.</p>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">👩‍🏫</div>
+        <h3 class="card-title">Faculty Member</h3>
+        <p class="card-description">Advanced teaching tools including lab session management, content creation, student progress tracking, automated assessment, and collaborative workspace administration.</p>
+      </div>
+      <div class="feature-card">
+        <div class="card-icon">👨‍🎓</div>
+        <h3 class="card-title">Student</h3>
+        <p class="card-description">Intuitive learning interface with session booking, virtual lab access, assignment submission, progress tracking, and collaborative tools for enhanced learning outcomes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h3>Virtual Labs Portal</h3>
+      </div>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Privacy Policy</a>
+        <a href="#" class="footer-link">Terms of Service</a>
+        <a href="#" class="footer-link">Support</a>
+        <a href="#" class="footer-link">Documentation</a>
+        <a href="#" class="footer-link">System Status</a>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Rajalakshmi Engineering College. All rights reserved. | Powered by Microsoft Azure</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // API Configuration
+    // ✅ Backend is running on port 7071, frontend on port 8080
+    const API_BASE = 'http://localhost:7071/api';
+
+    // ========================================
+    // Helper Functions
+    // ========================================
+    function getToken() {
+      return localStorage.getItem('token');
+    }
+
+    function setToken(token) {
+      if (token) {
+        localStorage.setItem('token', token);
+      } else {
+        localStorage.removeItem('token');
+      }
+    }
+
+    async function apiRequest(endpoint, method = 'GET', body = null, needsAuth = false) {
+      // Try with /api prefix first, fall back to without
+      let url = `${API_BASE}${endpoint}`;
+      
+      // If API_BASE is empty and endpoint doesn't start with /, add it
+      if (!API_BASE && !endpoint.startsWith('/')) {
+        url = `/${endpoint}`;
+      }
+      
+      console.log('🌐 API Request:', method, url);  // Debug log
+      
+      const headers = { 'Content-Type': 'application/json' };
+      
+      if (needsAuth) {
+        const token = getToken();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+      }
+      
+      const options = { method, headers };
+      if (body) {
+        options.body = JSON.stringify(body);
+      }
+      
+      const res = await fetch(url, options);
+      
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('❌ API Error:', res.status, errorText);  // Debug log
+        throw new Error(errorText || `HTTP ${res.status}`);
+      }
+      
+      return res.json();
+    }
+
+    // ========================================
+    // Get DOM elements
+    // ========================================
+    const regEmail = document.getElementById('regEmail');
+    const regPass  = document.getElementById('regPass');
+    const logEmail = document.getElementById('logEmail');
+    const logPass  = document.getElementById('logPass');
+    const btnRegister = document.getElementById('btnRegister');
+    const btnLogin    = document.getElementById('btnLogin');
+
+    function uiBusy(btn, busy) {
+      btn.disabled = busy;
+      btn.textContent = busy ? 'Please wait…' : (btn === btnRegister ? 'Register' : 'Login');
+    }
+
+    // ========================================
+    // Role-Based Redirect Function
+    // ========================================
+    function redirectBasedOnRole(role) {
+      console.log('🔀 Redirecting based on role:', role);
+      
+      // Close modal first
+      document.getElementById('loginModal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+      
+      // Redirect based on role
+      switch(role) {
+        case 'Admin':
+          console.log('➡️ Redirecting to admin.html');
+          location.href = 'admin.html';
+          break;
+        case 'Faculty':
+          console.log('➡️ Redirecting to faculty.html');
+          location.href = 'faculty.html';
+          break;
+        case 'Student':
+        default:
+          console.log('➡️ Redirecting to labs.html');
+          location.href = 'labs.html';
+          break;
+      }
+    }
+
+    // ========================================
+    // Handle Registration
+    // ========================================
+    async function handleRegister() {
+      const email = (regEmail.value || '').trim();
+      const password = regPass.value || '';
+      
+      if (!email || !password) {
+        alert('Enter email and password');
+        return;
+      }
+      
+      try {
+        uiBusy(btnRegister, true);
+        
+        // Step 1: Register
+        const { token } = await apiRequest('/auth/register', 'POST', { email, password }, false);
+        setToken(token);
+        
+        // Step 2: ✅ Fetch current user info with role from database
+        const meResponse = await apiRequest('/auth/me', 'GET', null, true);
+        
+        // Step 3: Store user data
+        localStorage.setItem('role', meResponse.user.role);
+        localStorage.setItem('email', meResponse.user.email);
+        localStorage.setItem('uid', meResponse.user.uid);
+        
+        console.log('✅ Registered successfully');
+        console.log('User ID:', meResponse.user.uid);
+        console.log('Email:', meResponse.user.email);
+        console.log('Role:', meResponse.user.role);
+        
+        // Step 4: ✅ Redirect based on role
+        redirectBasedOnRole(meResponse.user.role);
+        
+      } catch (e) {
+        alert('Registration failed: ' + (e.message || e));
+        console.error('Registration error:', e);
+      } finally {
+        uiBusy(btnRegister, false);
+      }
+    }
+
+    // ========================================
+    // Handle Login
+    // ========================================
+    async function handleLogin() {
+      const email = (logEmail.value || '').trim();
+      const password = logPass.value || '';
+      
+      if (!email || !password) {
+        alert('Enter email and password');
+        return;
+      }
+      
+      try {
+        uiBusy(btnLogin, true);
+        
+        // Step 1: Login and get initial token
+        const { token, user } = await apiRequest('/auth/login', 'POST', { email, password }, false);
+        setToken(token);
+        
+        console.log('📝 Initial login response - Role from token:', user.role);
+        
+        // Step 2: ✅ Fetch fresh user info from database
+        const meResponse = await apiRequest('/auth/me', 'GET', null, true);
+        const currentRole = meResponse.user.role;
+        
+        console.log('🔄 Fresh role from database:', currentRole);
+        
+        // Step 3: Store verified role
+        localStorage.setItem('role', currentRole);
+        localStorage.setItem('email', meResponse.user.email);
+        localStorage.setItem('uid', meResponse.user.uid);
+        
+        console.log('✅ Logged in successfully');
+        console.log('User ID:', meResponse.user.uid);
+        console.log('Email:', meResponse.user.email);
+        console.log('Final Role:', currentRole);
+        
+        // Step 4: ✅ Redirect based on role
+        redirectBasedOnRole(currentRole);
+        
+      } catch (e) {
+        alert('Login failed: ' + (e.message || e));
+        console.error('Login error:', e);
+      } finally {
+        uiBusy(btnLogin, false);
+      }
+    }
+
+    // ========================================
+    // Event Listeners
+    // ========================================
+    btnRegister.addEventListener('click', (e) => { 
+      e.preventDefault(); 
+      handleRegister(); 
+    });
+    
+    btnLogin.addEventListener('click', (e) => { 
+      e.preventDefault(); 
+      handleLogin(); 
+    });
+
+    // Modal functionality
+    const modal = document.getElementById('loginModal');
+    const openBtn = document.getElementById('openLoginBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+
+    openBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeBtn.addEventListener('click', function() {
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Smooth scrolling for navigation
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add scroll effect to navigation
+    window.addEventListener('scroll', function() {
+      const nav = document.querySelector('.nav-bar');
+      if (window.scrollY > 100) {
+        nav.style.background = 'rgba(255, 255, 255, 0.95)';
+        nav.style.color = '#2d3748';
+        nav.querySelectorAll('.nav-link, .main-title').forEach(el => {
+          el.style.color = '#2d3748';
+        });
+        const motto = nav.querySelector('.motto');
+        if (motto) motto.style.color = '#5a2d82';
+      } else {
+        nav.style.background = 'rgba(255, 255, 255, 0.05)';
+        nav.querySelectorAll('.nav-link, .main-title').forEach(el => {
+          el.style.color = 'white';
+        });
+        const motto = nav.querySelector('.motto');
+        if (motto) motto.style.color = '#ffd700';
+      }
+    });
+  </script>
+</body>
+</html>

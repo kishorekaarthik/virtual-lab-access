@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Virtual Labs • Rajalakshmi Engineering College</title>
+  <style>
+    /* RESET + GENERAL STYLES */
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+    body { background:#fafafa; color:#2c3e50; line-height:1.6; overflow-x:hidden; }
+    .hero-header { background: linear-gradient(135deg, rgba(45,55,72,0.95), rgba(90,45,130,0.9)), url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1600') center/cover no-repeat; min-height:50vh; display:flex; flex-direction:column; color:white; position:relative;}
+    .hero-header::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(90,45,130,0.3); z-index:1; }
+    .nav-bar { display:flex; justify-content:space-between; align-items:center; padding:1.2rem 4rem; position:relative; z-index:10; background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border-bottom:1px solid rgba(255,255,255,0.1); }
+    .logo-img { height:50px; width:auto; margin-right:20px; filter: brightness(1.1); }
+    .main-title { font-size:1.5rem; font-weight:600; margin-bottom:2px; }
+    .motto { font-size:0.85rem; color:#ffd700; font-weight:400; opacity:0.9; }
+    .navigation { display:flex; gap:2.5rem; }
+    .nav-link, #logoutBtn { color:white; text-decoration:none; font-weight:500; font-size:0.95rem; padding:0.6rem 1.2rem; border-radius:6px; border:1px solid transparent; background:none; cursor:pointer; }
+    .nav-link:hover, #logoutBtn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,215,0,0.5); }
+    .hero-content { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:3rem 2rem; position:relative; z-index:5; }
+    .hero-title { font-size:2.75rem; font-weight:700; margin-bottom:1rem; }
+    .hero-subtitle { font-size:1.15rem; opacity:0.9; max-width:600px; font-weight:400; }
+    .stats-section { background: linear-gradient(135deg, #5a2d82, #7c3aed); color:white; padding:2.5rem 2rem; text-align:center; }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:3rem; max-width:1000px; margin:0 auto; }
+    .stat-item { text-align:center; }
+    .stat-number { font-size:2.5rem; font-weight:700; color:#ffd700; margin-bottom:0.5rem; }
+    .stat-label { font-size:1rem; opacity:0.9; font-weight:500; }
+    .content-section { padding:4rem 2rem; background:white; }
+    .section-header { text-align:center; margin-bottom:3rem; }
+    .section-title { font-size:2.25rem; font-weight:700; color:#2d3748; margin-bottom:1rem; }
+    .section-subtitle { font-size:1.05rem; color:#64748b; max-width:600px; margin:0 auto; font-weight:400; }
+    .search-container { max-width:1200px; margin:0 auto 2.5rem; }
+    .search-wrapper { position:relative; display:flex; gap:1rem; }
+    .search-box { flex:1; position:relative; }
+    .search-icon { position:absolute; left:1.25rem; top:50%; transform:translateY(-50%); font-size:1.2rem; color:#94a3b8; }
+    .search-box input { width:100%; padding:1rem 1.5rem 1rem 3.5rem; border:2px solid #e2e8f0; border-radius:12px; font-size:1rem; }
+    .refresh-btn { padding:1rem 2rem; background: linear-gradient(135deg, #5a2d82, #7c3aed); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; }
+    .labs-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(380px,1fr)); gap:2rem; max-width:1400px; margin:0 auto; }
+    .lab-card { background:white; padding:2rem; border-radius:12px; box-shadow:0 4px 25px rgba(0,0,0,0.08); border:1px solid #e2e8f0; position:relative; overflow:hidden; animation:fadeInUp 0.5s ease-out backwards; }
+    .lab-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:4px; background: linear-gradient(90deg, #5a2d82, #7c3aed); }
+    @keyframes fadeInUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+    .card-header { margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:2px solid #f1f5f9; }
+    .lab-icon { width:60px; height:60px; background:linear-gradient(135deg, rgba(90,45,130,0.1), rgba(124,58,237,0.1)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:2rem; margin-bottom:1rem; }
+    .lab-name { font-size:1.35rem; font-weight:700; color:#2d3748; margin-bottom:0.5rem; line-height:1.3; }
+    .lab-category { display:inline-flex; padding:0.35rem 0.9rem; border-radius:20px; font-size:0.8rem; font-weight:600; background:rgba(124,58,237,0.1); color:#7c3aed; border:1.5px solid rgba(124,58,237,0.2); }
+    .info-row { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.875rem; color:#64748b; font-size:0.95rem; }
+    .info-icon { font-size:1.1rem; color:#7c3aed; width:24px; text-align:center; }
+    .info-label { font-weight:500; color:#475569; }
+    .info-value { margin-left:auto; font-weight:600; color:#2d3748; }
+    .enroll-btn { padding:0.5rem 1rem; background:linear-gradient(135deg,#5a2d82,#7c3aed); color:white; border:none; border-radius:10px; font-size:0.95rem; font-weight:600; cursor:pointer; transition:all 0.3s ease; margin-left:auto; }
+    .enroll-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(124,58,237,0.3); }
+    .loading-state, .empty-state { text-align:center; padding:4rem 2rem; grid-column:1/-1; }
+    .state-icon { font-size:4rem; margin-bottom:1rem; opacity:0.5; }
+    .state-text { color:#64748b; font-size:1.1rem; }
+    .footer { background:#1a202c; color:white; padding:3rem 2rem 2rem; text-align:center; }
+    .footer-links { display:flex; justify-content:center; gap:3rem; flex-wrap:wrap; margin-bottom:2rem; }
+    .footer-link { color:#a0aec0; text-decoration:none; font-weight:500; }
+    .footer-link:hover { color:#ffd700; }
+
+    @media(max-width:768px) { .labs-grid{grid-template-columns:1fr; gap:1.5rem;} .stats-grid{grid-template-columns:repeat(2,1fr); gap:2rem;} .search-wrapper{flex-direction:column;} .refresh-btn{width:100%;} }
+    @media(max-width:480px){.hero-title{font-size:1.875rem;} .stat-number{font-size:2rem;} .stats-grid{grid-template-columns:1fr;} .lab-name{font-size:1.2rem;}}
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", ()=>{
+      const btn=document.getElementById("logoutBtn");
+      if(btn) btn.addEventListener("click",()=>{localStorage.clear(); alert("Logged out successfully"); location.href="index.html";});
+    });
+  </script>
+</head>
+<body>
+  <header class="hero-header">
+    <nav class="nav-bar">
+      <div class="logo-section">
+        <img src="logo2.png" alt="REC Logo" class="logo-img">
+        <div class="title-section"><div class="main-title">Rajalakshmi Engineering College</div><div class="motto">The World Needs You</div></div>
+      </div>
+      <div class="navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="bookings.html" class="nav-link">My Enrollments</a>
+        <button id="logoutBtn">Logout</button>
+      </div>  
+    </nav>
+    <div class="hero-content">
+      <h1 class="hero-title">Virtual Laboratory Access</h1>
+      <p class="hero-subtitle">Browse and enroll in virtual labs for hands-on learning experiences</p>
+    </div>
+  </header>
+
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item"><div class="stat-number" id="totalLabs">--</div><div class="stat-label">Available Labs</div></div>
+      <div class="stat-item"><div class="stat-number" id="totalCapacity">--</div><div class="stat-label">Total Capacity</div></div>
+      <div class="stat-item"><div class="stat-number" id="activeEnrollments">--</div><div class="stat-label">Active Enrollments</div></div>
+      <div class="stat-item"><div class="stat-number" id="categoriesCount">--</div><div class="stat-label">Categories</div></div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="section-header"><h2 class="section-title">Available Virtual Labs</h2><p class="section-subtitle">Select and enroll in labs according to your course requirements and schedule</p></div>
+    <div class="search-container">
+      <div class="search-wrapper">
+        <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="q" placeholder="Search labs by name, category, or faculty..."></div>
+        <button class="refresh-btn" id="refresh">🔄 Refresh</button>
+      </div>
+    </div>
+
+    <div class="labs-grid" id="labsGrid"><div class="loading-state"><div class="state-icon">⏳</div><div class="state-text">Loading available labs...</div></div></div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy Policy</a>
+      <a href="#" class="footer-link">Terms of Service</a>
+      <a href="#" class="footer-link">Support</a>
+      <a href="#" class="footer-link">Documentation</a>
+      <a href="#" class="footer-link">System Status</a>
+    </div>
+    <div class="footer-bottom">© 2025 Rajalakshmi Engineering College. All rights reserved. | Powered by Microsoft Azure</div>
+  </footer>
+
+  <script type="module">
+    const API = localStorage.getItem('API_BASE') || 'http://localhost:7071/api';
+    const token = localStorage.getItem('token');
+    const labIcons = { 'Computer Science':'💻','Electronics':'⚡','Mechanical':'⚙️','Civil':'🏗️','Chemical':'🧪','Biotechnology':'🧬','Physics':'🔬','Chemistry':'⚗️','default':'🔬' };
+    function getLabIcon(category){return labIcons[category]||labIcons['default'];}
+    function updateStats(labs){
+      document.getElementById('totalLabs').textContent=labs.length;
+      document.getElementById('totalCapacity').textContent=labs.reduce((s,l)=>s+(l.Capacity||0),0);
+      document.getElementById('categoriesCount').textContent=new Set(labs.map(l=>l.Category)).size;
+      document.getElementById('activeEnrollments').textContent='0';
+    }
+    async function loadLabs(){
+      try{
+        const r=await fetch(`${API}/labs`,{headers:{Authorization:`Bearer ${token}`}});
+        if(!r.ok) throw new Error('Failed to load labs');
+        const labs=await r.json(); const grid=document.getElementById('labsGrid'); grid.innerHTML='';
+        if(!labs.length){grid.innerHTML=`<div class="empty-state"><div class="state-icon">📭</div><div class="state-text">No labs available at the moment</div></div>`;return;}
+        updateStats(labs);
+        labs.forEach(lab=>{
+          const card=document.createElement('div'); card.className='lab-card';
+          let tasksHtml=''; if(lab.Tasks && lab.Tasks.length>0){tasksHtml='<div class="tasks-section">';
+          lab.Tasks.forEach(task=>tasksHtml+=`<div class="info-row"><span class="info-label">Task:</span><span class="info-value">${task.taskName} (${task.marks} marks)</span><button class="enroll-btn" data-lab-id="${lab.LabId}" data-task-id="${task.taskId}">📝 Do Task</button></div>`); tasksHtml+='</div>';}
+          card.innerHTML=`<div class="card-header"><div class="lab-icon">${getLabIcon(lab.Category)}</div><h3 class="lab-name">${lab.Name}</h3><span class="lab-category">${lab.Category||'General'}</span></div>
+          <div class="card-body">
+          <div class="info-row"><span class="info-icon">👨‍🏫</span><span class="info-label">Faculty:</span><span class="info-value">${lab.Faculty||'N/A'}</span></div>
+          <div class="info-row"><span class="info-icon">👥</span><span class="info-label">Capacity:</span><span class="info-value">${lab.Capacity??'N/A'} students</span></div>
+          <div class="info-row"><span class="info-icon">📍</span><span class="info-label">Status:</span><span class="info-value">Available</span></div>
+          ${tasksHtml}</div>
+          <button class="enroll-btn" data-lab-id="${lab.LabId}">📚 Enroll This Lab</button>`;
+
+          const labEnrollBtn=card.querySelector('button[data-lab-id="'+lab.LabId+'"]:last-child');
+          labEnrollBtn.onclick=async()=>{
+            labEnrollBtn.disabled=true; labEnrollBtn.textContent='⏳ Enrolling...';
+            try{
+              const startUtc=new Date(Date.now()+10*60*1000).toISOString();
+              const endUtc=new Date(Date.now()+70*60*1000).toISOString();
+              const res=await fetch(`${API}/bookings`,{method:'POST', headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`}, body:JSON.stringify({labId:lab.LabId,startUtc,endUtc})});
+              if(!res.ok) throw new Error(await res.text());
+              alert(`✅ Successfully enrolled in ${lab.Name}!`); window.location.href='bookings.html';
+            }catch(e){alert('❌ Enrollment failed: '+e.message); labEnrollBtn.disabled=false; labEnrollBtn.textContent='📚 Enroll This Lab';}
+          }
+
+          card.querySelectorAll('button[data-task-id]').forEach(btn=>btn.onclick=()=>{const taskName=lab.Tasks.find(t=>t.taskId===btn.dataset.taskId).taskName; alert(`📝 Task selected: ${taskName}`);});
+          grid.appendChild(card);
+        });
+
+        document.getElementById('q').oninput=(e)=>{
+          const s=e.target.value.toLowerCase(); 
+          document.querySelectorAll('.lab-card').forEach(c=>{
+            const name=(c.querySelector('.lab-name')?.textContent||'').toLowerCase();
+            const category=(c.querySelector('.lab-category')?.textContent||'').toLowerCase(); 
+            const faculty=(c.querySelector('.info-value')?.textContent||'').toLowerCase();
+            if(name.includes(s) || category.includes(s) || faculty.includes(s)){
+              c.style.display='block';
+            } else { c.style.display='none'; }
+          });
+        };
+
+        document.getElementById('refresh').onclick=()=>loadLabs();
+
+      }catch(err){
+        console.error(err);
+        document.getElementById('labsGrid').innerHTML=`<div class="empty-state"><div class="state-icon">⚠️</div><div class="state-text">Failed to load labs. Please try again later.</div></div>`;
+      }
+    }
+
+    loadLabs();
+  </script>
+</body>
+</html>
